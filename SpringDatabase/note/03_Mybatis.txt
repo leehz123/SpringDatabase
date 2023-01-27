@@ -1,0 +1,61 @@
+03_Mybatis.txt
+
+# Mybatis
+- SQL문만 적으면 자동으로 DB에 연결해 데이터를 꺼내오는 프레임워크
+- 거의 모든 jdbc관련 코드를 자동으로 생성해준다.
+- 개발자는 사용할 쿼리의 종류와 SQL문만 정해주면 된다.
+
+
+
+# Mybatis dependencies
+<!--spring--> 부분에 추가
+	<!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-jdbc</artifactId>
+	    <version>${org.springframework-version}</version>
+	</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
+	<dependency>
+	    <groupId>org.mybatis</groupId>
+	    <artifactId>mybatis</artifactId>
+	    <version>3.5.10</version>
+	</dependency>
+				
+	<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis-spring -->
+	<dependency>
+	    <groupId>org.mybatis</groupId>
+	    <artifactId>mybatis-spring</artifactId>
+	    <version>2.0.7</version>
+	</dependency>
+	
+	
+	
+#어노테이션 방식(나중에 유지보수가 안 좋아서 많이 사용하진 않음)
+
+
+
+
+
+# XML 방식  
+
+- mapper interface 와 완전히 같은 패키지(src/main/resources 내부에 같은 경로로 폴더와 파일 생성)에 XML파일 작성
+- 크기 비교 쿼리문이 있을 때 XML이기 때문에 부등호를 원하는대로 받아들일 수 없음
+
+
+
+# XML 방식으로 부등호 사용하기
+	
+	방법 1) 부등호 쓰는 부분을 <![CDATA[]]> 로 감싸주기
+	<select id="getListBetweenDept" resultType="com.ezen.database.dto.Employee">
+		SELECT * FROM employees 
+		<![CDATA[WHERE department_id >= #{lower_dept} AND department_id <= #{upper_dept}]]>
+	</select>
+	
+	방법 2) 또는 &lt; 와 &gt;를 활용한다.
+	<select id="getListBetweenDept" resultType="com.ezen.database.dto.Employee">
+		SELECT * FROM employees 
+		WHERE department_id &gt;= #{lower_dept} AND department_id &lt;= #{upper_dept}
+		ORDER BY department_id ASC
+	</select>
